@@ -18,6 +18,14 @@ from selenium.webdriver.chrome.options import Options
 
 class RTTCrawler(object):
     def __init__(self, movie_name):
+        '''
+           @Description: Initialize the RTTCrawler, using headless Chrome to run selenium
+           @Param movie_name: The name of the movie
+           @Return: None
+           @Author: Brian Qu
+           @Time: 2023/11/14 10:36:05
+        '''
+        # Initialize the instance
         self.movie_name = movie_name
         self.base_url = "https://www.rottentomatoes.com/m/"
         self.all_critics_tail_url = "/reviews"
@@ -25,9 +33,16 @@ class RTTCrawler(object):
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         self.driver = webdriver.Chrome(options=chrome_options)
-        # self.driver = webdriver.Chrome()
 
     def construct_url(self, reviewType):
+        '''
+           @Description: Use review type to construct url of different comments groups
+           @Param reviewType: review type
+           @Return: url
+           @Author: Brian Qu
+           @Time: 2023/11/14 11:00:15
+        '''
+        # Use reviewType to get different comments group website
         if reviewType == "All critics":
             url = f"{self.base_url}{self.movie_name}{self.all_critics_tail_url}"
         elif reviewType == "All audience":
@@ -35,6 +50,13 @@ class RTTCrawler(object):
         return url
     
     def extract_critics_comments_and_ratings(self):
+        '''
+           @Description: Use to extract critics' comments and ratings
+           @Param: None
+           @Return: comments_ratings_pairs
+           @Author: Brian Qu
+           @Time: 2023/11/14 11:05:01
+        '''
         url = self.construct_url("All critics")
         self.driver.get(url)
         comments_ratings_pairs = set()
@@ -57,4 +79,5 @@ class RTTCrawler(object):
             print("No more pages to load, extraction complete")
         
         self.driver.quit()
+
         return comments_ratings_pairs
