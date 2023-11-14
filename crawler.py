@@ -26,7 +26,7 @@ class RTTCrawler(object):
            @Time: 2023/11/14 10:36:05
         '''
         # Initialize the instance
-        self.movie_name = movie_name
+        self.movie_name = movie_name.lower().replace(' ', "_")
         self.base_url = "https://www.rottentomatoes.com/m/"
         self.all_critics_tail_url = "/reviews"
         self.all_audience_tail_url = "/reviews?type=user"
@@ -70,7 +70,7 @@ class RTTCrawler(object):
                 reviews_blocks = soup.find_all('div', {'class': "review-row"})
 
                 for block in reviews_blocks:
-                    comment = block.find('p', {'class': 'review-text'}).get_text(strip=True)
+                    comment = block.find('p', {'class': 'review-text'}).get_text(strip=True).replace('\n', '')
                     rating = block.find('score-icon-critic-deprecated').get('state')
                     comments_ratings_pairs.add((comment, rating))
 
@@ -81,7 +81,7 @@ class RTTCrawler(object):
         
         self.driver.quit()
 
-        return comments_ratings_pairs
+        return list(comments_ratings_pairs)
     
     def extract_audience_comments_and_ratings(self, reviewType: str) -> set:
         '''
@@ -102,7 +102,7 @@ class RTTCrawler(object):
                 reviews_blocks = soup.find_all('div', {'class': 'audience-review-row'})
 
                 for block in reviews_blocks:
-                    comment = block.find('p', {'slot': 'content'}).get_text(strip=True)
+                    comment = block.find('p', {'slot': 'content'}).get_text(strip=True).replace('\n', '')
                     rating = 0
                     stars = block.find_all('span')
                     for star in stars:
@@ -119,10 +119,26 @@ class RTTCrawler(object):
 
         self.driver.quit()
 
-        return comments_ratings_pairs
+        return list(comments_ratings_pairs)
     
-crawler = RTTCrawler("the_killer_2023")
-pairs = crawler.extract_audience_comments_and_ratings("All audience")
-print(len(pairs))
-pairs = list(pairs)
-print(pairs[0])
+    def write_comments_to_file(self, comments_ratings_pairs: list, reviewType: str) -> None:
+        '''
+            @Description: Write comments and ratings to a specified file.
+            @Param comments_ratings_pairs: list
+            @Param reviewType: string
+            @Return: None
+            @Author: Brian Qu
+            @Time: 2023/11/14 16:20:00
+        '''
+        txt_path = "Comments_Ratings_Files/" + self.movie_name + "-" + reviewType + ".txt"
+        with open(txt_path, 'w', encoding='utf-8') as file:
+            for comment, rating in comments_ratings_pairs:
+                file.write(f"Rating: {rating}\nComment: {comment}\n\n")
+
+def main(): 
+    crawler = RTTCrawler("the killer 2023")
+    pairs = crawler.extract_audience_comments_and_ratings("All audience")
+    crawler.write_comments_to_file(pairs, "All audience")
+
+if __name__ == "__main__":
+    main()
