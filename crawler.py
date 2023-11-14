@@ -6,6 +6,7 @@
 @Version :   1.0
 @Contact :   brian.qu@mail.utoronto.ca or qujianning0401@163.com
 '''
+from time import sleep
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -24,6 +25,7 @@ class RTTCrawler(object):
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         self.driver = webdriver.Chrome(options=chrome_options)
+        # self.driver = webdriver.Chrome()
 
     def construct_url(self, reviewType):
         if reviewType == "All critics":
@@ -35,23 +37,24 @@ class RTTCrawler(object):
     def extract_critics_comments_and_ratings(self):
         url = self.construct_url("All critics")
         self.driver.get(url)
-        comments = []
-        ratings = []
+        comments_ratings_pairs = set()
 
-        page_source = self.driver.page_source
-        soup = BeautifulSoup(page_source, "html.parser")
-        reviews_blocks = soup.find_all('div', {'class': "review-row"})
-        for block in reviews_blocks:
-            comment = block.find('p', {'class': 'review-text'}).get_text(strip=True)
-            comments.append(comment)
-            rating = block.find('score-icon-critic-deprecated').get('state')
-            ratings.append(rating)
+        try:
+            while True:
+                WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'review-row')))
+                page_source = self.driver.page_source
+                soup = BeautifulSoup(page_source, "html.parser")
+                reviews_blocks = soup.find_all('div', {'class': "review-row"})
+
+                for block in reviews_blocks:
+                    comment = block.find('p', {'class': 'review-text'}).get_text(strip=True)
+                    rating = block.find('score-icon-critic-deprecated').get('state')
+                    comments_ratings_pairs.add((comment, rating))
+
+                load_more_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="reviews"]/div[1]/rt-button[2]')))
+                self.driver.execute_script("arguments[0].click();", load_more_button)
+        except TimeoutException:
+            print("No more pages to load, extraction complete")
         
         self.driver.quit()
-        return comments, ratings
-    
-movie_name = "the_killer_2023"
-scraper = RTTCrawler(movie_name)
-comments, ratings = scraper.extract_critics_comments_and_ratings()
-print(len(comments))
-print(len(ratings))
+        return comments_ratings_pairs
