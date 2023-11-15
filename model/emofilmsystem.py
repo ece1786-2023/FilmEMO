@@ -32,8 +32,10 @@ class EmoFilmSystem(nn.Module):
     @torch.no_grad()
     def inference(self, input_text):
         self.eval()
+        # only inference here
+        self.feature_extractor._train_ = False
         tokens = self.tokenized_input(input_text)
-        extract_feature = self.feature_extractor(tokens, train=False)
+        extract_feature = self.feature_extractor(tokens)
         probabilities = self.classifier.inference(extract_feature)
         return probabilities.argmax(dim=-1)
     
