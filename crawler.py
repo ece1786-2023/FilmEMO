@@ -16,6 +16,8 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
 import re
 from selenium.common.exceptions import WebDriverException
+import os
+import csv
 
 
 class RTTCrawler(object):
@@ -172,10 +174,83 @@ class RTTCrawler(object):
             for comment, rating in comments_ratings_pairs:
                 file.write(f"Rating: {rating}\nComment: {comment}\n\n")
 
+    def read_txt_file(self, file_path: str) -> list:
+        '''
+           @Description: read critics comments and ratings from txt
+           @Param file_path: string
+           @Return: list
+           @Author: Brian Qu
+           @Time: 2023/11/16 13:27:06
+        '''
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+        entries = content.split('\n\n')
+        return [tuple(entry.split('\n')) for entry in entries if entry]
+    
+    def write_critics_to_csv(self, data: list, csv_file_path: str) -> None:
+        '''
+           @Description: write critics data to scsv file
+           @Param data: list
+           @Param csv_file_path: string
+           @Return: None
+           @Author: Brian Qu
+           @Time: 2023/11/16 13:30:09
+        '''
+        with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
+            writer = csv.writer(csvfile)
+            for entry in data:
+                for rating, comment in entry:
+                    if rating.split(": ")[1] == "fresh":
+                        writer.writerow([1, comment.split(": ")[1]])
+                    else:
+                        writer.writerow([-1, comment.split(": ")[1]])
+
+    def write_audience_to_csv(self, data: list, csv_file_path: str) -> None:
+        '''
+           @Description: write audience data to scsv file
+           @Param data: list
+           @Param csv_file_path: string
+           @Return: None
+           @Author: Brian Qu
+           @Time: 2023/11/16 13:30:09
+        '''
+        with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
+            writer = csv.writer(csvfile)
+            for entry in data:
+                for rating, comment in entry:
+                    if 0 <= float(rating.split(": ")[1]) <= 1.5:
+                        writer.writerow([-1, comment.split(": ")[1]])
+                    elif 1.5 < float(rating.split(": ")[1]) <= 3.5:
+                        writer.writerow([0, comment.split(": ")[1]])
+                    else:
+                        writer.writerow([1, comment.split(": ")[1]])
+
+    def process_folder(self, folder_path: str, csv_file_path: str):
+        '''
+           @Description: iterate all txt files and write the content to csv file
+           @Param folder_path: str 
+           @Param csv_file_path: str 
+           @Return: None
+           @Author: Brian Qu
+           @Time: 2023/11/16 13:48:23
+        '''
+        all_data = []
+        for file_name in os.listdir(folder_path):
+            if file_name.endswith('All critics.txt'):
+                file_path = os.path.join(folder_path, file_name)
+                all_data.append(self.read_txt_file(file_path))
+        self.write_critics_to_csv(all_data, csv_file_path)
+
+        all_data = []
+        for file_name in os.listdir(folder_path):
+            if file_name.endswith('All audience.txt'):
+                file_path = os.path.join(folder_path, file_name)
+                all_data.append(self.read_txt_file(file_path))
+        self.write_audience_to_csv(all_data, csv_file_path)
+
 def main():
     crawler = RTTCrawler("")
-    pairs = crawler.extract_audience_comments_and_ratings("All audience")
-    crawler.write_comments_to_file(pairs, "All audience")
+    crawler.process_folder("Comments_Ratings_Files/", "ratings_comments_pairs.csv")
 
 if __name__ == "__main__":
     main()
