@@ -1,10 +1,10 @@
 import torch.nn as nn
 import torch
-from transformers import GPT2Config, GPT2Model
+from transformers import GPT2Config, GPT2Model, GPT2ForSequenceClassification
 
 # abstract Extractor class
 class Extractor(nn.Module):
-    def __init__(self, train=True):
+    def __init__(self, pre_train_model_name, train=True):
         super().__init__()
         self.model = None
         self._train_ = train
@@ -25,11 +25,10 @@ class Extractor(nn.Module):
         return extract_feature.shape
 
 class GPT2Extractor(Extractor):
-    def __init__(self, train=True):
-        super().__init__(train=train)
+    def __init__(self, pre_train_model_name, train=True):
+        super().__init__(pre_train_model_name, train=train)
         configuration = GPT2Config()
         self.model = GPT2Model(configuration)
+        self.pre_train_model_name = pre_train_model_name
+        self.model.config.pad_token_id = self.model.config.eos_token_id
         self.config = self.model.config
-
-# gpt2 = GPT2Extractor()
-# print(gpt2.get_output_shape())

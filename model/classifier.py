@@ -14,22 +14,18 @@ class Classifier(nn.Module):
     
     def get_model(self):
         model = nn.Sequential()
+        input_size = self.number_features
         # hidden layer
         for i in range(len(self.hidden_units)):
-            if i == 0:
-                input_size = self.number_features
-            else:
-                input_size = self.hidden_units[i-1]
             output_size = self.hidden_units[i]
             model.append(nn.Linear(input_size,output_size))
             model.append(nn.ReLU())
+            input_size = output_size
         # output layer
         if self.number_classes == 2:
-            model.append(nn.Linear(self.hidden_units[-1], 1))
-            model.append(self.sigmod)
+            model.append(nn.Linear(input_size, 1))
         else:
-            model.append(nn.Linear(self.hidden_units[-1], self.number_classes))
-            model.append(self.softmax)
+            model.append(nn.Linear(input_size, self.number_classes))
         return model
     
     def forward(self, X):
@@ -39,4 +35,7 @@ class Classifier(nn.Module):
     @torch.no_grad()
     def inference(self, X):
         self.eval()
-        return self.model(X).detach()
+        if self.number_classes == 2:
+            return self.sigmod(self.model(X).detach())
+        else:
+            return self.softmax(self.model(X).detach())
