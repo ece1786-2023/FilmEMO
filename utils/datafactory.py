@@ -7,6 +7,8 @@ import re
 import nltk
 from nltk.corpus import stopwords
 
+english_stopwords = set(stopwords.words('english'))
+
 class MovieReviewDataset(Dataset):
     def __init__(self, data):
         self.data = data
@@ -41,7 +43,7 @@ class DataFactory:
                     u"\U000024C2-\U0001F251"
                     "]+", '', text, flags=re.UNICODE)  # delete emoji
         words = text.split()
-        words = [word for word in words if word not in stopwords.words('english')]
+        words = [word for word in words if word not in english_stopwords]
         text = ' '.join(words)
         return text
 
@@ -50,7 +52,7 @@ class DataFactory:
         # loading raw dataset
         data = self.loading_dataset()
         # remove unwanted string
-        # data["comment"] = data["comment"].apply(self._preprocess_text)
+        data["comment"] = data["comment"].apply(self._preprocess_text)
         data["rating"] += 1
         # data = data.apply(self.tokenize, axis=1)
         return data
