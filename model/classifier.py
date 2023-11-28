@@ -19,6 +19,7 @@ class Classifier(nn.Module):
         for i in range(len(self.hidden_units)):
             output_size = self.hidden_units[i]
             model.append(nn.Linear(input_size,output_size))
+            model.append(nn.Dropout(p=0.1))
             model.append(nn.ReLU())
             input_size = output_size
         # output layer
