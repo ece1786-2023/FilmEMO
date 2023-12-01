@@ -35,6 +35,8 @@ class RTTCrawler(object):
         self.all_critics_tail_url = "/reviews"
         self.all_audience_tail_url = "/reviews?type=user"
         chrome_options = Options()
+        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+        chrome_options.add_argument(f"user-agent={user_agent}")
         chrome_options.add_argument("--headless")
         self.driver = webdriver.Chrome(options=chrome_options)
         # self.driver = webdriver.Chrome(options=chrome_options)
@@ -135,6 +137,35 @@ class RTTCrawler(object):
         self.driver.quit()
 
         return list(comments_ratings_pairs)
+    
+    def extract_movie_pic_url(self, reviewType: str) -> str:
+        '''
+           @Description: Use to extract critics' comments and ratings
+           @Param reviewType: string
+           @Return comments_ratings_pairs: set
+           @Author: Brian Qu
+           @Time: 2023/11/14 11:05:01
+        '''
+        url = self.construct_url(reviewType)
+        try:
+            self.driver.get(url)
+        except WebDriverException:
+            print(f"Failed to load URL: {url}")
+            return []
+        movie_pic_url = ""
+
+        try:
+            page_source = self.driver.page_source
+            soup = BeautifulSoup(page_source, "html.parser")
+            img_tag = soup.find('img', {'data-qa': 'sidebar-poster-img'})
+            if img_tag:
+                movie_pic_url = str(img_tag.get('src'))
+        except (WebDriverException, TimeoutException):
+            print("No more pages to load, extraction complete")
+        
+        self.driver.quit()
+
+        return movie_pic_url
     
     def get_popular_movies(self, movieCount: int) -> list[str]:
         '''

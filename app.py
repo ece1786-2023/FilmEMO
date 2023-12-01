@@ -31,6 +31,8 @@ def film_comment_sentiment_analysis():
         critics_comments_ratings_pairs = crawler.extract_critics_comments_and_ratings("All critics")
         crawler = RTTCrawler(film_name)
         audiences_comments_ratings_pairs = crawler.extract_audience_comments_and_ratings("All audience")
+        crawler = RTTCrawler(film_name)
+        movie_pic_url = crawler.extract_movie_pic_url("All critics")
     except (WebDriverException, TimeoutException):
         print("No more pages to load, extraction complete")
 
@@ -74,7 +76,8 @@ def film_comment_sentiment_analysis():
     
     return jsonify({'average_score': average_score,
                     'critics_average_score': critics_average_score,
-                    'audiences_average_score': audiences_average_score})
+                    'audiences_average_score': audiences_average_score,
+                    'movie_pic_url': movie_pic_url})
 
 if __name__ == "__main__":
     app.run(debug=True)
