@@ -12,10 +12,12 @@ from crawler import RTTCrawler
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import WebDriverException
 import torch
+from flask_cors import CORS
 
 from model.system_factory import SystemFactory
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/filmEmo', methods=['POST'])
 def film_comment_sentiment_analysis():
