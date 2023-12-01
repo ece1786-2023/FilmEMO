@@ -46,31 +46,35 @@ def film_comment_sentiment_analysis():
     model_checkpoint_path = "filmEmo.pth"
     system = torch.load(model_checkpoint_path)
 
-    res_critics = []
-    res_audiences = []
     total_score = 0
+    critics_score = 0
+    audiences_score = 0
 
     for comment in critics_comments:
-        res_critics.append(system.inference(comment[0], need_tokenize=True).item())
         if (system.inference(comment[0], need_tokenize=True).item() == 0):
-            total_score += 1.5
+            critics_score += 1
         elif (system.inference(comment[0], need_tokenize=True).item() == 1):
-            total_score += 5.5
+            critics_score += 5
         else:
-            total_score += 10
+            critics_score += 10
 
     for comment in audiences_comments:
-        res_audiences.append(system.inference(comment[0], need_tokenize=True).item())
         if (system.inference(comment[0], need_tokenize=True).item() == 0):
-            total_score += 3
+            audiences_score += 3
         elif (system.inference(comment[0], need_tokenize=True).item() == 1):
-            total_score += 6
+            audiences_score += 6
         else:
-            total_score += 8
+            audiences_score += 9
 
-    average_score = total_score / 100    
+    total_score = critics_score + audiences_score
+
+    average_score = round((total_score / 100), 1)
+    critics_average_score = round((critics_score / 60), 1)
+    audiences_average_score = round((audiences_score / 40), 1)
     
-    return jsonify({'average_score': average_score})
+    return jsonify({'average_score': average_score,
+                    'critics_average_score': critics_average_score,
+                    'audiences_average_score': audiences_average_score})
 
 if __name__ == "__main__":
     app.run(debug=True)

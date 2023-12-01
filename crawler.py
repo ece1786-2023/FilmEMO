@@ -124,6 +124,9 @@ class RTTCrawler(object):
                             rating += 0.5
                     comments_ratings_pairs.add((comment, rating))
                 
+                if (len(comments_ratings_pairs) >= 1000):
+                    break
+                
                 load_more_button = WebDriverWait(self.driver, 3).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="reviews"]/div[2]/rt-button')))
                 self.driver.execute_script("arguments[0].click();", load_more_button)
         except (WebDriverException, TimeoutException):
