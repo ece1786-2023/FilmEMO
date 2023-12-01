@@ -72,7 +72,7 @@ class RTTCrawler(object):
 
         try:
             while True:
-                WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'review-row')))
+                WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, 'review-row')))
                 page_source = self.driver.page_source
                 soup = BeautifulSoup(page_source, "html.parser")
                 reviews_blocks = soup.find_all('div', {'class': "review-row"})
@@ -82,7 +82,7 @@ class RTTCrawler(object):
                     rating = block.find('score-icon-critic-deprecated').get('state')
                     comments_ratings_pairs.add((comment, rating))
 
-                load_more_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="reviews"]/div[1]/rt-button[2]')))
+                load_more_button = WebDriverWait(self.driver, 3).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="reviews"]/div[2]/rt-button')))
                 self.driver.execute_script("arguments[0].click();", load_more_button)
         except (WebDriverException, TimeoutException):
             print("No more pages to load, extraction complete")
@@ -124,7 +124,7 @@ class RTTCrawler(object):
                             rating += 0.5
                     comments_ratings_pairs.add((comment, rating))
                 
-                load_more_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="reviews"]/div[1]/rt-button[2]')))
+                load_more_button = WebDriverWait(self.driver, 3).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="reviews"]/div[2]/rt-button')))
                 self.driver.execute_script("arguments[0].click();", load_more_button)
         except (WebDriverException, TimeoutException):
             print("No more pages to load, extraction complete")
