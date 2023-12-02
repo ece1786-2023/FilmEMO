@@ -12,7 +12,7 @@ function fetchFilmData() {
 
     // 模拟进度
     var progress = 0;
-    var totalTime = 60000; // 总时间为40秒
+    var totalTime = 70000; // 总时间为70秒
     var intervalTime = 1000; // 每1秒更新一次进度
     var progressIncrement = 100 * (intervalTime / totalTime); // 每次增加的百分比
 
@@ -20,7 +20,7 @@ function fetchFilmData() {
         progress += progressIncrement;
         if (progress > 100) progress = 100; // 确保不超过100%
         progressBar.style.width = progress + '%';
-        progressBar.innerText = Math.round(progress) + '%';
+        progressBar.innerText = "Analyzing... " + Math.round(progress) + '%';
 
         if (progress >= 100) clearInterval(interval); // 到达100%时停止
     }, intervalTime);
@@ -37,11 +37,11 @@ function fetchFilmData() {
         // 立即设置进度条为100%
         clearInterval(interval);
         progressBar.style.width = '100%';
-        progressBar.innerText = '加载完成';
+        progressBar.innerText = 'Analyzing Complete!';
 
         setTimeout(() => {
             progressBar.style.display = 'none';
-        }, 500); // 延迟隐藏进度条
+        }, 3000); // 延迟隐藏进度条
 
         displayFilmData(data);
     })

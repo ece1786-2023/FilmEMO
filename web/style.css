@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
+    background-color: #000000;
     color: #333;
     margin: 0;
     padding: 0;
@@ -10,17 +10,17 @@ body {
     max-width: 800px;
     margin: auto;
     overflow: hidden;
-    background-color: #fff;
+    background-color: #d8d8d8;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 header {
-    background-color: #fa320a; /* Rotten Tomatoes 红色 */
+    background-color: #e7a900; 
     color: #fff;
     padding: 20px 0;
     text-align: center;
-    border-bottom: 4px solid #d62d20; /* 深红色边框 */
+    border-bottom: 4px solid #e7a900;
 }
 
 header h1 {
@@ -42,17 +42,18 @@ header h1 {
 
 .search-section button {
     padding: 10px 20px;
-    background-color: #fa320a; /* Rotten Tomatoes 红色 */
+    background-color: #e7a900; /* Rotten Tomatoes 红色 */
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-left: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease-in-out;
 }
 
 .search-section button:hover {
-    background-color: #d62d20; /* 深红色 */
+    background-color: #b18200; /* 深红色 */
 }
 
 .results-section {
@@ -111,6 +112,9 @@ header h1 {
         width: 80%;
         margin-bottom: 20px;
     }
+    .search-section input[type="text"] {
+        width: 80%;
+    }
 }
 
 
@@ -130,4 +134,5 @@ header h1 {
     text-align: center;
     color: white;
     line-height: 20px; /* 让文字垂直居中 */
+    transition: width 0.5s ease-in-out;
 }
