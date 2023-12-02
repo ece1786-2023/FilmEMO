@@ -29,15 +29,19 @@ header h1 {
 }
 
 .search-section {
-    margin: 20px 0;
+    position: relative; /* 使搜索图标定位于输入框内 */
     text-align: center;
+    margin: 20px 0;
 }
 
 .search-section input[type="text"] {
-    width: 300px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    width: 80%; /* 根据需要调整宽度 */
+    padding: 10px 20px 10px 40px; /* 左边的 padding 大一些，为图标留出空间 */
+    border: none; /* 移除边框 */
+    border-radius: 20px; /* 圆角边框 */
+    font-size: 16px; /* 字体大小根据需要调整 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 添加阴影 */
+    outline: none; /* 移除焦点轮廓 */
 }
 
 .search-section button {
