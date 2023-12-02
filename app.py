@@ -56,21 +56,25 @@ def film_comment_sentiment_analysis():
 
     for comment in critics_comments:
         if (system.inference(comment[0], need_tokenize=True).item() == 0):
-            critics_score += 1
+            total_score += 1
+            critics_score += 3
         elif (system.inference(comment[0], need_tokenize=True).item() == 1):
+            total_score += 5
             critics_score += 5
         else:
-            critics_score += 10
+            total_score += 10
+            critics_score += 9
 
     for comment in audiences_comments:
         if (system.inference(comment[0], need_tokenize=True).item() == 0):
+            total_score += 3
             audiences_score += 3
         elif (system.inference(comment[0], need_tokenize=True).item() == 1):
-            audiences_score += 6
+            total_score += 6
+            audiences_score += 5
         else:
-            audiences_score += 9
-
-    total_score = critics_score + audiences_score
+            total_score += 9
+            audiences_score += 10
 
     average_score = round((total_score / 100), 1)
     critics_average_score = round((critics_score / 60), 1)
