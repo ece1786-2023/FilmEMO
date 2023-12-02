@@ -84,6 +84,9 @@ class RTTCrawler(object):
                     rating = block.find('score-icon-critic-deprecated').get('state')
                     comments_ratings_pairs.add((comment, rating))
 
+                if (len(comments_ratings_pairs) >= 200):
+                    break
+
                 load_more_button = WebDriverWait(self.driver, 3).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="reviews"]/div[2]/rt-button')))
                 self.driver.execute_script("arguments[0].click();", load_more_button)
         except (WebDriverException, TimeoutException):
@@ -138,7 +141,7 @@ class RTTCrawler(object):
 
         return list(comments_ratings_pairs)
     
-    def extract_movie_pic_url(self, reviewType: str) -> str:
+    def extract_movie_pic_url(self, reviewType: str) -> map:
         '''
            @Description: Use to extract critics' comments and ratings
            @Param reviewType: string
@@ -152,20 +155,28 @@ class RTTCrawler(object):
         except WebDriverException:
             print(f"Failed to load URL: {url}")
             return []
-        movie_pic_url = ""
+        film_data = {}
 
         try:
             page_source = self.driver.page_source
             soup = BeautifulSoup(page_source, "html.parser")
             img_tag = soup.find('img', {'data-qa': 'sidebar-poster-img'})
             if img_tag:
-                movie_pic_url = str(img_tag.get('src'))
+                film_data['file_data'] = str(img_tag.get('src'))
+            film_name = soup.find('a', {'data-qa': 'sidebar-media-link'})
+            if film_name:
+                film_data['film_name'] = film_name.get_text(strip=True).replace('\n', '')
+            movie_details = soup.find('ul', {'data-qa': 'sidebar-movie-details'}).find_all('li')
+            if movie_details:
+                film_data['film_length'] = movie_details[0].get_text(strip=True)
+                film_data['film_type'] = movie_details[1].get_text(strip=True)
+                film_data['film_director'] = movie_details[2].find('a').get_text(strip=True)
         except (WebDriverException, TimeoutException):
             print("No more pages to load, extraction complete")
         
         self.driver.quit()
 
-        return movie_pic_url
+        return film_data
     
     def get_popular_movies(self, movieCount: int) -> list[str]:
         '''
