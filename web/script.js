@@ -1,6 +1,7 @@
 document.getElementById('submitBtn').addEventListener('click', fetchFilmData);
 
 function fetchFilmData() {
+    document.getElementById('filmData').innerHTML = '';
     var filmName = document.getElementById('filmName').value;
     var data = { film_name: filmName };
 
@@ -43,6 +44,7 @@ function fetchFilmData() {
             progressBar.style.display = 'none';
         }, 3000); // 延迟隐藏进度条
 
+        document.getElementById('filmData').innerHTML = '';
         displayFilmData(data);
     })
     .catch(error => {
@@ -60,9 +62,18 @@ function displayFilmData(data) {
     filmDataDiv.innerHTML = `
         <img src="${filmData.file_data}" alt="电影图片" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
         <h2>${filmData.film_name}</h2>
-        <p><strong>Director:</strong> ${filmData.film_director}</p>
-        <p><strong>Film Type:</strong> ${filmData.film_type}</p>
-        <p><strong>Film Length:</strong> ${filmData.film_length}</p>
+        <div class="info-card">
+            <div class="info-title">Director</div>
+            <div class="info-content">${filmData.film_director}</div>
+        </div>
+        <div class="info-card">
+            <div class="info-title">Film Type</div>
+            <div class="info-content">${filmData.film_type}</div>
+        </div>
+        <div class="info-card">
+            <div class="info-title">Film Length</div>
+            <div class="info-content">${filmData.film_length}</div>
+        </div>
         <div class="score-container">
             <div class="score-card">
                 <h3>Audience Average Score</h3>

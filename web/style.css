@@ -54,6 +54,7 @@ header h1 {
 
 .search-section button:hover {
     background-color: #b18200; /* 深红色 */
+    transform: translateY(-3px);
 }
 
 .results-section {
@@ -84,7 +85,7 @@ header h1 {
 }
 
 .score-card {
-    background-color: #fff;
+    background-color: #f5f5f5;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     text-align: center;
@@ -96,7 +97,7 @@ header h1 {
 
 .score-card h3 {
     margin: 10px 0;
-    color: #fa320a; /* Rotten Tomatoes 红色 */
+    color: #e7a900; /* Rotten Tomatoes 红色 */
 }
 
 .score-card p {
@@ -104,6 +105,10 @@ header h1 {
     margin: 5px 0;
     color: #333;
     font-weight: bold;
+}
+
+.score-card:hover {
+    transform: translateY(-5px); /* 悬停时上移 */
 }
 
 /* 适应不同屏幕大小 */
@@ -138,13 +143,50 @@ header h1 {
 }
 
 h2 {
-    color: #333;
-    text-align: center;
-    margin-top: 20px;
+    font-size: 32px;
+    color: #e7a900; /* 亮橙色 */
+    text-shadow: 2px 2px 4px #000000; /* 文字阴影 */
+    animation: fadeIn 2s; /* 淡入效果 */
 }
 
 p {
-    color: #666;
-    text-align: center;
+    font-size: 20px;
+    color: #32cd32; /* 亮绿色 */
     margin: 10px 0;
+    animation: slideIn 1.5s; /* 滑入效果 */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-100px); opacity: 0; }
+    to { transform: translateX(0px); opacity: 1; }
+}
+
+.info-card {
+    background-color: #f5f5f5; /* 浅灰色背景 */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    margin: 10px 0;
+    transition: transform 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-5px); /* 悬停时上移 */
+}
+
+.info-title {
+    font-size: 20px;
+    color: #e7a900; /* 亮蓝色 */
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.info-content {
+    font-size: 16px;
+    color: #333333; /* 深灰色 */
 }
