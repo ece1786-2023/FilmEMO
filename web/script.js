@@ -51,6 +51,7 @@ function fetchFilmData() {
         console.error('Error:', error);
         clearInterval(interval);
         progressBar.style.display = 'none';
+        document.getElementById('filmData').innerHTML = '<p>Error loading data. Please try again later.</p>';
     });
 }
 

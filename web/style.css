@@ -223,3 +223,48 @@ p {
     animation: fadeInUp 0.5s ease-out;
 }
 
+@media (max-width: 768px) {
+    .score-card {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+    .search-section input[type="text"] {
+        width: 100%;
+    }
+}
+
+/* 增加按钮过渡效果 */
+.search-section button {
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+/* 增加按钮悬浮效果 */
+.search-section button:hover {
+    background-color: #b18200;
+    transform: scale(1.05);
+}
+
+/* 优化字体大小和颜色 */
+.info-title, .score-card h3 {
+    color: #e7a900;
+}
+
+.info-content, .score-card p {
+    color: #333;
+}
+
+/* 增加过渡动画效果 */
+.info-card, .score-card, .results-section img {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* 优化进度条 */
+.progress-bar {
+    transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out;
+}
+
+/* 添加对比度和可读性 */
+body {
+    color: #f5f5f5;
+    background-color: #1a1a1a;
+}
