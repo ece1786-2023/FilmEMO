@@ -55,19 +55,25 @@ function fetchFilmData() {
 
 function displayFilmData(data) {
     var filmDataDiv = document.getElementById('filmData');
+    var filmData = data.film_data;
+
     filmDataDiv.innerHTML = `
-        <img src="${data.movie_pic_url}" alt="电影图片" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <img src="${filmData.file_data}" alt="电影图片" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h2>${filmData.film_name}</h2>
+        <p><strong>Director:</strong> ${filmData.film_director}</p>
+        <p><strong>Film Type:</strong> ${filmData.film_type}</p>
+        <p><strong>Film Length:</strong> ${filmData.film_length}</p>
         <div class="score-container">
             <div class="score-card">
-                <h3>观众平均分数</h3>
+                <h3>Audience Average Score</h3>
                 <p>${data.audiences_average_score}/10</p>
             </div>
             <div class="score-card">
-                <h3>影评人平均分数</h3>
+                <h3>Critics Average Score</h3>
                 <p>${data.critics_average_score}/10</p>
             </div>
             <div class="score-card">
-                <h3>总平均分数</h3>
+                <h3>Weighted Average Score</h3>
                 <p>${data.average_score}/10</p>
             </div>
         </div>

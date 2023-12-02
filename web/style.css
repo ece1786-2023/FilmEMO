@@ -136,3 +136,15 @@ header h1 {
     line-height: 20px; /* 让文字垂直居中 */
     transition: width 0.5s ease-in-out;
 }
+
+h2 {
+    color: #333;
+    text-align: center;
+    margin-top: 20px;
+}
+
+p {
+    color: #666;
+    text-align: center;
+    margin: 10px 0;
+}
