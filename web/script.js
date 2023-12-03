@@ -89,5 +89,18 @@ function displayFilmData(data) {
                 <p>${data.average_score}/10</p>
             </div>
         </div>
+        <div class="score-container">
+            <div class="chart-container">
+                <div class="chart-title">Audience Sentiment</div>
+                <img id="audience_img_data" alt="Audience Sentiment Chart" style="width: 100%; height: auto;">
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">Critic Sentiment</div>
+                <img id="critics_img_data" alt="Critic Sentiment Chart" style="width: 100%; height: auto;">
+            </div>
+        </div>
     `;
+    // 设置饼图的源
+    document.getElementById('audience_img_data').src = data.audience_img_data;
+    document.getElementById('critics_img_data').src = data.critics_img_data;
 }
