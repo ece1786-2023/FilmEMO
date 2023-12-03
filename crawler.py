@@ -34,10 +34,12 @@ class RTTCrawler(object):
         self.base_url = "https://www.rottentomatoes.com/m/"
         self.all_critics_tail_url = "/reviews"
         self.all_audience_tail_url = "/reviews?type=user"
+        # proxy_url = "72.10.160.91:32197"
         chrome_options = Options()
         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
         chrome_options.add_argument(f"user-agent={user_agent}")
         chrome_options.add_argument("--headless")
+        # chrome_options.add_argument(f'--proxy-server={proxy_url}')
         self.driver = webdriver.Chrome(options=chrome_options)
         # self.driver = webdriver.Chrome(options=chrome_options)
 
@@ -90,6 +92,7 @@ class RTTCrawler(object):
                 load_more_button = WebDriverWait(self.driver, 3).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="reviews"]/div[2]/rt-button')))
                 self.driver.execute_script("arguments[0].click();", load_more_button)
         except (WebDriverException, TimeoutException):
+            print(len(comments_ratings_pairs))
             print("No more pages to load, extraction complete")
         
         self.driver.quit()
@@ -135,6 +138,7 @@ class RTTCrawler(object):
                 load_more_button = WebDriverWait(self.driver, 3).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="reviews"]/div[2]/rt-button')))
                 self.driver.execute_script("arguments[0].click();", load_more_button)
         except (WebDriverException, TimeoutException):
+            print(len(comments_ratings_pairs))
             print("No more pages to load, extraction complete")
 
         self.driver.quit()
