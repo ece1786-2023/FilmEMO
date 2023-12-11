@@ -8,7 +8,7 @@ import torch.nn as nn
 class SystemFactory:
     @staticmethod
     def ExtractorFactory(pre_train_model_name, train_extractor):
-        if pre_train_model_name in ["gpt2", "gpt2-medium"]:
+        if pre_train_model_name in ["gpt2-large", "gpt2-medium"]:
             return GPT2Extractor(pre_train_model_name, train_extractor)
         else:
             raise Exception(f'no available pre_train_model {pre_train_model_name}')
