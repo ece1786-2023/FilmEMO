@@ -27,8 +27,7 @@ class Extractor(nn.Module):
 class GPT2Extractor(Extractor):
     def __init__(self, pre_train_model_name, train=True):
         super().__init__(pre_train_model_name, train=train)
-        configuration = GPT2Config()
-        self.model = GPT2Model(configuration)
+        self.model = GPT2Model.from_pretrained(pre_train_model_name)
         self.pre_train_model_name = pre_train_model_name
         self.model.config.pad_token_id = self.model.config.eos_token_id
         self.config = self.model.config
